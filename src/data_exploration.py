@@ -32,7 +32,8 @@ train_features.sig_id.nunique()
 train_features.cp_type.value_counts()
 
 # %% Visualise some training features
-gs = train_features[[col for col in train_features.columns if "g-" in col]][:1].values.reshape(-1, 1)
+g_cols = [col for col in train_features.columns if "g-" in col]
+gs = train_features[g_cols][:1].values.reshape(-1, 1)
 plt.plot(gs)
 plt.plot(sorted(gs))
 # %%
