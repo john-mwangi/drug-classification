@@ -7,12 +7,16 @@ several combinations of features
 * A gbm could be used but this would entail training a separate gbm for each
 feature since they don't support multi-label processing. This would require a
 lot of time.
+* In other words, in a multilabel problem the outcome is represented not by
+one column but by several columns and each column would require its own
+model.
 * A neural network would overcome this problem.
 """
 # %%
 import pandas as pd
 import matplotlib.pyplot as plt
 import glob
+
 # %%
 file_paths = glob.glob(pathname="../inputs/*.csv")
 
@@ -35,12 +39,15 @@ g_cols = [col for col in train_features.columns if "g-" in col]
 gs = train_features[g_cols][:1].values.reshape(-1, 1)
 plt.plot(gs)
 plt.plot(sorted(gs))
+
 # %%
 train_features["g-0"].plot(kind="hist")
+
 # %%
 train_features["c-0"].plot(kind="hist")
+
 # %% Some target exploration
-# Some labels demonstrate extreme class imbalance
+# Some labels demonstrate extreme class imqbalance
 train_targets_scored.head()
 train_targets_scored.shape
 train_targets_scored.sum()[1:].sort_values()
