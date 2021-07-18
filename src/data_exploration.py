@@ -10,7 +10,6 @@ lot of time.
 * A neural network would overcome this problem.
 """
 # %%
-from os import path
 import pandas as pd
 import matplotlib.pyplot as plt
 import glob
