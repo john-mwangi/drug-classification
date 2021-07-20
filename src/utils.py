@@ -1,5 +1,6 @@
 """
-This module will contain the loss function.
+This module contains utilities for calculating the loss function,
+handling categorical variables.
 """
 
 from typing import final
@@ -67,16 +68,17 @@ class Engine:
 
         return final_loss / len(data_loader)
 
-    def add_dummies(data, column):
+    def add_dummies(data, columns):
 
-        ohe = pd.get_dummies(data=data[column])
-        ohe_columns = [f"{column}_{c}" for c in ohe.columns]
-        ohe.columns = ohe_columns
-        data = data.drop(column, axis=1)
+        ohe = pd.get_dummies(data=data[columns])
+        data = data.drop(columns, axis=1)
         data = data.join(ohe)
 
         return data
 
     def process_data(df):
-        df = add_dummies(data=df, column=["cp_time", "cp_dose", "cp_type"])
+
+        df = df.drop(labels="sig_id", axis=1)
+        cat_features = df.select_dtypes(include="object").columns
+        df = add_dummies(data=df, columns=cat_features)
         return df
