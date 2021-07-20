@@ -82,3 +82,4 @@ class Engine:
         cat_features = df.select_dtypes(include="object").columns
         df = add_dummies(data=df, columns=cat_features)
         return df
+
