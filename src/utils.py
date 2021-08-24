@@ -1,12 +1,13 @@
 """
 This module contains utilities for calculating the loss function,
-handling categorical variables.
+handling categorical variables, neural network model
 """
 
-from typing import final
 import torch
 import torch.nn as nn
 import pandas as pd
+
+DIMS = 1024
 
 
 class MoaDataset:
@@ -33,7 +34,8 @@ class Engine:
         self.optimizer = optimizer
         self.device = device
 
-    def loss_fn(self, targets, outputs):
+    @staticmethod
+    def loss_fn(targets, outputs):
         return nn.BCEWithLogitsLoss()(outputs, targets)
 
     def train_loss(self, data_loader):
@@ -82,3 +84,30 @@ class Engine:
         cat_features = df.select_dtypes(include="object").columns
         df = add_dummies(data=df, columns=cat_features)
         return df
+
+
+class Model(nn.Model):
+    def __init__(self, num_features, num_targets):
+        super().__init__()
+
+        self.model = nn.Sequential(
+
+            nn.Linear(in_features=num_features, out_features=DIMS),
+            nn.BatchNorm1d(num_features=DIMS),
+            nn.Dropout(p=0.3),
+            nn.PReLU(),
+
+            nn.Linear(in_features=DIMS, out_features=DIMS),
+            nn.BatchNorm1d(num_features=DIMS),
+            nn.Dropout(p=0.3),
+            nn.PReLU(),
+
+            nn.Linear(in_features=DIMS, out_features=num_targets)
+        )
+
+    def forward(self, x):
+        x = self.model(x)
+        return x
+
+# https://www.youtube.com/watch?v=VRVit0-0AXE 1:00:00
+# Converting the above pytorch model to pytorch-lightning (more elegant)
