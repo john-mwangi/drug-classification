@@ -5,3 +5,4 @@ outputs
 .spyproject
 *.docx
 pytorch_lightning.py
+__pycache__
