@@ -100,7 +100,7 @@ def objective(trial):
         "num_layers": trial.suggest_int("num_layers", 1, 7),
         "hidden_size": trial.suggest_int("hidden_size", 16, 2048),
         "dropout": trial.suggest_uniform("dropout", 0.1, 0.7),
-        "learning_rate": trial.suggest_uniform("learning_rate", 1e-6, 1e-3)
+        "learning_rate": trial.suggest_loguniform("learning_rate", 1e-6, 1e-3)
     }
 
     all_losses = []
