@@ -1,6 +1,6 @@
 """
 This module is for training the actual neural network and hyper-parameter
-tuning.
+tuning using optuna.
 """
 
 import pandas as pd
@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 
 import utils
 
-DEVICE = "cpu"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 EPOCHS = 10
 
 
@@ -60,6 +60,7 @@ def run_training(fold, params, save_model=False):
     )
 
     model.to(device=DEVICE)
+
     optimizer = torch.optim.Adam(params=model.parameters(),
                                  lr=params["learning_rate"])
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
